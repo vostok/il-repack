@@ -208,9 +208,10 @@ namespace ILRepacking
 
             if (internalize && _options.RenameInternalized && !IsModuleTag(nt))
             {
-                string newName = GenerateName(nt);
-                _logger.Verbose("Renaming " + nt.FullName + " into " + newName);
-                nt.Name = newName;
+                string oldFullName = nt.FullName; 
+                nt.Name = GenerateName(nt);
+                nt.Namespace = GenerateNamespaceName(nt);
+                _logger.Verbose("Renaming " + oldFullName + " into " + nt.FullName);
             }
 
             return nt;
@@ -223,6 +224,19 @@ namespace ILRepacking
         private string GenerateName(TypeDefinition typeDefinition)
         {
             return "<" + Guid.NewGuid() + ">" + typeDefinition.Name;
+        }
+
+        private string GenerateNamespaceName(TypeDefinition typeDefinition)
+        {
+            string ns = typeDefinition.Namespace;
+
+            if (string.IsNullOrEmpty(ns))
+                return "<>";
+            
+            if (ns.StartsWith("<>"))
+                return ns;
+            
+            return "<>" + ns;
         }
 
         private bool ShouldDrop<TMember>(TMember member) where TMember : ICustomAttributeProvider, IMemberDefinition
