@@ -165,15 +165,15 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\cecil\Mono.Cecil.csproj">
-      <Project>{d68133bd-1e63-496e-9ede-4fbdbf77b486}</Project>
+      <Project>{16C3FA32-4775-497F-8794-DD5AF13CFE22}</Project>
       <Name>Mono.Cecil</Name>
     </ProjectReference>
     <ProjectReference Include="..\cecil\symbols\mdb\Mono.Cecil.Mdb.csproj">
-      <Project>{8559dd7f-a16f-46d0-a05a-9139faeba8fd}</Project>
+      <Project>{5A5F84B1-DD1A-4134-932C-C3AF5BDAD391}</Project>
       <Name>Mono.Cecil.Mdb</Name>
     </ProjectReference>
     <ProjectReference Include="..\cecil\symbols\pdb\Mono.Cecil.Pdb.csproj">
-      <Project>{63e6915c-7ea4-4d76-ab28-0d7191eea626}</Project>
+      <Project>{4D22D51C-4230-46AF-8657-4FD757D9C8BC}</Project>
       <Name>Mono.Cecil.Pdb</Name>
     </ProjectReference>
   </ItemGroup>
