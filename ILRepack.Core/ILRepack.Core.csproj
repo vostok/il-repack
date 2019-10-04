@@ -41,7 +41,7 @@
         <PubDir>$(ProjectDir)bin\Publish\$(TargetFramework)\publish\</PubDir>
     </PropertyGroup>
     
-    <Target Name="Publishing" BeforeTargets="RepackAssemblies" Condition="'$(Configuration)' == 'Release'">
+    <Target Name="Publishing" BeforeTargets="RepackAssemblies" Condition="'$(Configuration)' == 'Release' AND '$(TargetFramework)' != ''">
         <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet publish -c Publish -f $(TargetFramework)" />
     </Target>
 
