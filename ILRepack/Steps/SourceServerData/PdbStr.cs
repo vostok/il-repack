@@ -7,13 +7,28 @@ namespace ILRepacking.Steps.SourceServerData
     internal class PdbStr : IDisposable
     {
         private string _pdbStrPath = Path.GetTempFileName();
+        private readonly bool broken = false;
 
         public PdbStr()
         {
-            using (var resourceStream = typeof(PdbStr).Assembly.GetManifestResourceStream("ILRepacking.pdbstr.exe"))
-            using (var fileStream = File.Create(_pdbStrPath))
+            try
             {
-                resourceStream.CopyTo(fileStream);
+                using (var resourceStream = typeof(PdbStr).Assembly.GetManifestResourceStream("ILRepacking.pdbstr.exe"))
+                using (var fileStream = File.Create(_pdbStrPath))
+                {
+                    if (resourceStream == null)
+                    {
+                        broken = true;
+                    }
+                    else
+                    {
+                        resourceStream.CopyTo(fileStream);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                broken = true;
             }
         }
 
@@ -32,6 +47,9 @@ namespace ILRepacking.Steps.SourceServerData
 
         private string Execute(string arguments)
         {
+            if (broken)
+                return string.Empty;
+
             var processInfo = new ProcessStartInfo
                               {
                                   RedirectStandardOutput = true,
