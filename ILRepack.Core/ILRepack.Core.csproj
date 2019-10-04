@@ -1,0 +1,75 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFrameworks>net40;netcoreapp2.1</TargetFrameworks>
+        <Configurations>Release;Debug;Publish</Configurations>
+        <DebugType>embedded</DebugType>
+        <!--<DefineConstants>CORE</DefineConstants>-->
+    </PropertyGroup>
+
+    <ItemGroup>
+	  <Compile Include="..\ILRepack\**\*.cs" LinkBase="" />
+      <Compile Remove="..\ILRepack\Properties\AssemblyInfo.cs" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <PackageReference Include="BamlParser" Version="1.0.0" />
+      <PackageReference Include="fasterflect" Version="2.1.3" />
+      <PackageReference Include="Mono.Posix" Version="4.0.0" />
+    </ItemGroup>
+
+    <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
+        <DefineConstants>CORE</DefineConstants>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.CSharp" Condition="'$(TargetFramework)' == 'net40'" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
+      <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\cecil\Mono.Cecil.csproj" />
+      <ProjectReference Include="..\cecil\symbols\mdb\Mono.Cecil.Mdb.csproj" />
+      <ProjectReference Include="..\cecil\symbols\pdb\Mono.Cecil.Pdb.csproj" />
+    </ItemGroup>
+    
+    <PropertyGroup Condition="'$(Configuration)' == 'Release' Or '$(Configuration)' == 'NoTests'">
+        <PubDir>$(ProjectDir)bin\Publish\$(TargetFramework)\publish\</PubDir>
+    </PropertyGroup>
+    
+    <Target Name="Publishing" BeforeTargets="RepackAssemblies" Condition="'$(Configuration)' == 'Release'">
+        <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet publish -c Publish -f $(TargetFramework)" />
+    </Target>
+
+    <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
+        <Extension>.dll</Extension>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(TargetFramework)' == 'net40'">
+        <Extension>.exe</Extension>
+    </PropertyGroup>
+
+    <Target Name="RepackAssemblies" AfterTargets="Build" Condition="'$(Configuration)|$(TargetFramework)' == 'Release|netcoreapp2.1'">
+        <ItemGroup>
+            <MergeAssemblies Include="$(ProjectDir)$(OutputPath)$(AssemblyName)$(Extension)" />
+            <MergeAssemblies Include="$(PubDir)Mono.*.dll" />
+            <MergeAssemblies Include="$(PubDir)Fasterflect.dll" />
+            <MergeAssemblies Include="$(PubDir)BamlParser.dll" />
+        </ItemGroup>
+        <Exec Command="dotnet &quot;$(ProjectDir)$(OutputPath)ILRepack.Core.dll&quot; /internalize /log:$(ProjectDir)$(OutputPath)ilrepack.log /out:$(ProjectDir)..\build23\$(AssemblyName).v1.dll @(MergeAssemblies->'%(RelativeDir)%(FileName)%(Extension)', ' ')" />
+    </Target>
+
+    <Target Name="RepackAssemblies2" AfterTargets="Build" Condition="'$(Configuration)|$(TargetFramework)' == 'Release|net40'">
+        <ItemGroup>
+            <MergeAssemblies Include="$(ProjectDir)$(OutputPath)$(AssemblyName)$(Extension)" />
+            <MergeAssemblies Include="$(PubDir)Mono.*.dll" />
+            <MergeAssemblies Include="$(PubDir)Fasterflect.dll" />
+            <MergeAssemblies Include="$(PubDir)BamlParser.dll" />
+        </ItemGroup>
+        <Exec Command="&quot;$(ProjectDir)$(OutputPath)ILRepack.Core.exe&quot; /internalize /log:$(ProjectDir)$(OutputPath)ilrepack.log /out:$(ProjectDir)..\\buildCore\ILRepack.exe @(MergeAssemblies->'%(RelativeDir)%(FileName)%(Extension)', ' ')" />
+    </Target>
+</Project>
