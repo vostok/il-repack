@@ -155,7 +155,7 @@ namespace ILRepacking
             IMetadataScope ikvmRuntimeReference = repack.TargetAssemblyMainModule.AssemblyReferences.FirstOrDefault(r => r.Name == "IKVM.Runtime");
             if (ikvmRuntimeReference == null)
             {
-                ikvmRuntimeReference = repack.MergeScope(repack.GlobalAssemblyResolver.Resolve("IKVM.Runtime").Name);
+                ikvmRuntimeReference = repack.MergeScope(repack.GlobalAssemblyResolver.Resolve(AssemblyNameReference.Parse("IKVM.Runtime")).Name);
             }
             if (ikvmRuntimeReference == null)
             {
