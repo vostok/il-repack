@@ -60,7 +60,8 @@
             <MergeAssemblies Include="$(PubDir)Fasterflect.dll" />
             <MergeAssemblies Include="$(PubDir)BamlParser.dll" />
         </ItemGroup>
-        <Exec Command="dotnet &quot;$(ProjectDir)$(OutputPath)ILRepack.Core.dll&quot; /internalize /log:$(ProjectDir)$(OutputPath)ilrepack.log /out:$(ProjectDir)..\build23\$(AssemblyName).v1.dll @(MergeAssemblies->'%(RelativeDir)%(FileName)%(Extension)', ' ')" />
+        <Exec Command="dotnet &quot;$(ProjectDir)$(OutputPath)ILRepack.Core.dll&quot; /internalize /log:$(ProjectDir)$(OutputPath)ilrepack.log /out:$(ProjectDir)..\buildCore\$(AssemblyName).dll @(MergeAssemblies->'%(RelativeDir)%(FileName)%(Extension)', ' ')" />
+        <Copy SourceFiles="$(OutputPath)$(AssemblyName).runtimeconfig.json;" DestinationFolder="$(ProjectDir)..\buildCore\" />
     </Target>
 
     <Target Name="RepackAssemblies2" AfterTargets="Build" Condition="'$(Configuration)|$(TargetFramework)' == 'Release|net40'">
@@ -70,6 +71,6 @@
             <MergeAssemblies Include="$(PubDir)Fasterflect.dll" />
             <MergeAssemblies Include="$(PubDir)BamlParser.dll" />
         </ItemGroup>
-        <Exec Command="&quot;$(ProjectDir)$(OutputPath)ILRepack.Core.exe&quot; /internalize /log:$(ProjectDir)$(OutputPath)ilrepack.log /out:$(ProjectDir)..\\buildCore\ILRepack.exe @(MergeAssemblies->'%(RelativeDir)%(FileName)%(Extension)', ' ')" />
+        <Exec Command="&quot;$(ProjectDir)$(OutputPath)ILRepack.Core.exe&quot; /internalize /log:$(ProjectDir)$(OutputPath)ilrepack.log /out:$(ProjectDir)..\\buildFramework\ILRepack.exe @(MergeAssemblies->'%(RelativeDir)%(FileName)%(Extension)', ' ')" />
     </Target>
 </Project>
