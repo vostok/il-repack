@@ -357,12 +357,19 @@ namespace ILRepacking
                 Logger.Info("Writing output assembly to disk");
                 // If this is an executable and we are on linux/osx we should copy file permissions from
                 // the primary assembly
-                if (isUnixEnvironment)
+                try
                 {
-                    Stat stat;
-                    Logger.Info("Copying permissions from " + PrimaryAssemblyFile);
-                    Syscall.stat(PrimaryAssemblyFile, out stat);
-                    Syscall.chmod(Options.OutputFile, stat.st_mode);
+                    if (isUnixEnvironment)
+                    {
+                        Stat stat;
+                        Logger.Info("Copying permissions from " + PrimaryAssemblyFile);
+                        Syscall.stat(PrimaryAssemblyFile, out stat);
+                        Syscall.chmod(Options.OutputFile, stat.st_mode);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.Warn($"Can't copy permissions:\n{e}");
                 }
                 if (hadStrongName && !TargetAssemblyDefinition.Name.HasPublicKey)
                     Options.StrongNameLost = true;
