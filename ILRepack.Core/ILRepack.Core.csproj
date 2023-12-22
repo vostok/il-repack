@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFrameworks>net40;netcoreapp2.1</TargetFrameworks>
+        <TargetFrameworks>net40;netcoreapp2.1;net6.0</TargetFrameworks>
         <Configurations>Release;Debug;Publish</Configurations>
         <DebugType>embedded</DebugType>
         <!--<DefineConstants>CORE</DefineConstants>-->
@@ -19,7 +19,7 @@
       <PackageReference Include="Mono.Posix" Version="4.0.0" />
     </ItemGroup>
 
-    <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
+    <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1' Or '$(TargetFramework)' == 'net6.0'">
         <DefineConstants>CORE</DefineConstants>
     </PropertyGroup>
 
@@ -27,7 +27,7 @@
       <Reference Include="Microsoft.CSharp" Condition="'$(TargetFramework)' == 'net40'" />
     </ItemGroup>
 
-    <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
+    <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1' Or '$(TargetFramework)' == 'net6.0'">
       <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
     </ItemGroup>
 
@@ -45,7 +45,7 @@
         <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet publish -c Publish -f $(TargetFramework)" />
     </Target>
 
-    <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
+    <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1' Or '$(TargetFramework)' == 'net6.0'">
         <Extension>.dll</Extension>
     </PropertyGroup>
 
