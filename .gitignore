@@ -33,5 +33,6 @@ _NCrunch*
 /.vs
 /.idea
 buildCore
+buildNet6
 build23
 /buildFramework
