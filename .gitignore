@@ -32,6 +32,4 @@ _NCrunch*
 *.DotSettings
 /.vs
 /.idea
-buildCore
-build23
-/buildFramework
+finalBuild*
